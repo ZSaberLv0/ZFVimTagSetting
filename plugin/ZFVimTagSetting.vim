@@ -8,9 +8,6 @@ endif
 
 " ============================================================
 " config
-if !exists('g:ZFVimTagSetting_keymap')
-    let g:ZFVimTagSetting_keymap=1
-endif
 
 " ============================================================
 " always use global tags, and manually update local tags
@@ -40,9 +37,6 @@ function! ZF_TagsFileLocal()
     let dummy = system('ctags -f "' . l:tagfile . '" --tag-relative=yes -R')
     :bd!
 endfunction
-if g:ZFVimTagSetting_keymap==1
-    nnoremap <leader>ctagl :call ZF_TagsFileLocal()<cr>
-endif
 function! ZF_TagsFileGlobal()
     :new
     let l:tagfile = substitute("" . $HOME . "/.vim_cache/.easytags", '\\', '/', 'g')
@@ -50,18 +44,12 @@ function! ZF_TagsFileGlobal()
     let dummy = system('ctags -f "' . l:tagfile . '" --tag-relative=yes -R')
     :bd!
 endfunction
-if g:ZFVimTagSetting_keymap==1
-    nnoremap <leader>ctagg :call ZF_TagsFileGlobal()<cr>
-endif
 function! ZF_TagsFileGlobalAdd()
     :new
     let l:tagfile = substitute("" . $HOME . "/.vim_cache/.easytags", '\\', '/', 'g')
     let dummy = system('ctags -f "' . l:tagfile . '" --tag-relative=yes -R -a')
     :bd!
 endfunction
-if g:ZFVimTagSetting_keymap==1
-    nnoremap <leader>ctaga :call ZF_TagsFileGlobalAdd()<cr>
-endif
 function! ZF_TagsFileRemove()
     :new
     let l:tagfile = substitute("" . $HOME . "/.vim_cache/.easytags", '\\', '/', 'g')
@@ -70,8 +58,4 @@ function! ZF_TagsFileRemove()
     let dummy = system('rm "' . l:tagfile . '"')
     :bd!
 endfunction
-if g:ZFVimTagSetting_keymap==1
-    nnoremap <leader>ctagr :call ZF_TagsFileRemove()<cr>
-    nnoremap <leader>ctagv :edit $HOME/.vim_cache/.easytags<cr>
-endif
 
