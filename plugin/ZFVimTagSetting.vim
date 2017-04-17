@@ -14,7 +14,73 @@ endif
 set tags=
 set tags+=./tags,tags
 set tags+=./.vim_tags,.vim_tags
-set tags+=~/.vim_cache/.easytags
+set tags+=~/.vim_cache/.vim_tags
+
+function! s:ZF_TagsExcludePattern(cmd)
+    let list = split(&wildignore, ',')
+    let cmd = a:cmd
+    for item in list
+        execute "let cmd.=' --exclude=" . '"' . item . '"' . "'"
+    endfor
+    return cmd
+endfunction
+function! ZF_TagsFileLocal()
+    let l:tagfile = ".vim_tags"
+    call system('rm "' . l:tagfile . '"')
+    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R'
+    let cmd = s:ZF_TagsExcludePattern(cmd)
+    try
+        redraw!
+        echo "generating tags in background"
+        execute 'AsyncRun ' . cmd
+    catch
+        redraw!
+        echo "generating tags"
+        call system(cmd)
+        redraw!
+        echo "generating tags finished"
+    endtry
+endfunction
+function! ZF_TagsFileGlobal()
+    let l:tagfile = substitute("" . $HOME . "/.vim_cache/.vim_tags", '\\', '/', 'g')
+    call system('rm "' . l:tagfile . '"')
+    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R'
+    let cmd = s:ZF_TagsExcludePattern(cmd)
+    try
+        redraw!
+        echo "generating tags in background"
+        execute 'AsyncRun ' . cmd
+    catch
+        redraw!
+        echo "generating tags"
+        call system(cmd)
+        redraw!
+        echo "generating tags finished"
+    endtry
+endfunction
+function! ZF_TagsFileGlobalAdd()
+    let l:tagfile = substitute("" . $HOME . "/.vim_cache/.vim_tags", '\\', '/', 'g')
+    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R -a'
+    let cmd = s:ZF_TagsExcludePattern(cmd)
+    try
+        execute 'AsyncRun ' . cmd
+    catch
+        redraw!
+        echo "generating tags"
+        call system(cmd)
+        redraw!
+        echo "generating tags finished"
+    endtry
+endfunction
+function! ZF_TagsFileRemove()
+    let l:tagfile = substitute("" . $HOME . "/.vim_cache/.vim_tags", '\\', '/', 'g')
+    call system('rm "' . l:tagfile . '"')
+    let l:tagfile = ".vim_tags"
+    call system('rm "' . l:tagfile . '"')
+    echo "tags removed"
+endfunction
+
+" special setting for easytags
 augroup ZF_setting_TagsResetForPhp
     autocmd!
     autocmd FileType php
@@ -30,32 +96,4 @@ augroup ZF_setting_TagsResetForPhp
                 \ set tags+=./tags,tags|
                 \ set tags+=./.vim_tags,.vim_tags
 augroup END
-function! ZF_TagsFileLocal()
-    :new
-    let l:tagfile = ".vim_tags"
-    let dummy = system('rm "' . l:tagfile . '"')
-    let dummy = system('ctags -f "' . l:tagfile . '" --tag-relative=yes -R')
-    :bd!
-endfunction
-function! ZF_TagsFileGlobal()
-    :new
-    let l:tagfile = substitute("" . $HOME . "/.vim_cache/.easytags", '\\', '/', 'g')
-    let dummy = system('rm "' . l:tagfile . '"')
-    let dummy = system('ctags -f "' . l:tagfile . '" --tag-relative=yes -R')
-    :bd!
-endfunction
-function! ZF_TagsFileGlobalAdd()
-    :new
-    let l:tagfile = substitute("" . $HOME . "/.vim_cache/.easytags", '\\', '/', 'g')
-    let dummy = system('ctags -f "' . l:tagfile . '" --tag-relative=yes -R -a')
-    :bd!
-endfunction
-function! ZF_TagsFileRemove()
-    :new
-    let l:tagfile = substitute("" . $HOME . "/.vim_cache/.easytags", '\\', '/', 'g')
-    let dummy = system('rm "' . l:tagfile . '"')
-    let l:tagfile = ".vim_tags"
-    let dummy = system('rm "' . l:tagfile . '"')
-    :bd!
-endfunction
 
