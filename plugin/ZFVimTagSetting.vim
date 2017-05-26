@@ -2,9 +2,7 @@
 " for https://github.com/ZSaberLv0/zf_vimrc.vim
 " Author:  ZSaberLv0 <http://zsaber.com/>
 
-if exists("g:ZFVimTagSetting_loaded") && g:ZFVimTagSetting_loaded != 1
-    finish
-endif
+let g:ZFVimTagSetting_loaded=1
 
 " ============================================================
 " config
