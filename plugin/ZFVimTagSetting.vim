@@ -7,7 +7,7 @@ let g:ZFVimTagSetting_loaded=1
 " ============================================================
 " config
 if !exists('g:ZFVimTagSetting_tagsName')
-    let g:ZFVimTagSetting_tagsName='tags'
+    let g:ZFVimTagSetting_tagsName='.vim_tags'
 endif
 if !exists('g:ZFVimTagSetting_tagsGlobalPath')
     let g:ZFVimTagSetting_tagsGlobalPath='~/.vim_cache'
