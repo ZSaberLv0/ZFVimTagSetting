@@ -36,7 +36,7 @@ function! s:ZF_TagsExcludePattern(cmd)
 endfunction
 function! ZF_TagsFileLocal()
     let l:tagfile = g:ZFVimTagSetting_tagsName
-    call system('rm "' . l:tagfile . '"')
+    call delete(l:tagfile)
     let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R'
     let cmd = s:ZF_TagsExcludePattern(cmd)
     try
@@ -53,7 +53,7 @@ function! ZF_TagsFileLocal()
 endfunction
 function! ZF_TagsFileGlobal()
     let l:tagfile = substitute(fnamemodify(g:ZFVimTagSetting_tagsGlobalPath . '/' . g:ZFVimTagSetting_tagsName, ':p'), '\\', '/', 'g')
-    call system('rm "' . l:tagfile . '"')
+    call delete(l:tagfile)
     let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R'
     let cmd = s:ZF_TagsExcludePattern(cmd)
     try
@@ -84,9 +84,9 @@ function! ZF_TagsFileGlobalAdd()
 endfunction
 function! ZF_TagsFileRemove()
     let l:tagfile = substitute(fnamemodify(g:ZFVimTagSetting_tagsGlobalPath . '/' . g:ZFVimTagSetting_tagsName, ':p'), '\\', '/', 'g')
-    call system('rm "' . l:tagfile . '"')
+    call delete(l:tagfile)
     let l:tagfile = g:ZFVimTagSetting_tagsName
-    call system('rm "' . l:tagfile . '"')
+    call delete(l:tagfile)
     echo "tags removed"
 endfunction
 
