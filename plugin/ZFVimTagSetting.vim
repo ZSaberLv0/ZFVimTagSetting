@@ -10,7 +10,11 @@ if !exists('g:ZFVimTagSetting_tagsName')
     let g:ZFVimTagSetting_tagsName='.vim_tags'
 endif
 if !exists('g:ZFVimTagSetting_tagsGlobalPath')
-    let g:ZFVimTagSetting_tagsGlobalPath='~/.vim_cache'
+    if exists('g:zf_vim_cache_path')
+        let g:ZFVimTagSetting_tagsGlobalPath=g:zf_vim_cache_path
+    else
+        let g:ZFVimTagSetting_tagsGlobalPath='~/.vim_cache'
+    endif
 endif
 
 " ============================================================
@@ -37,7 +41,7 @@ endfunction
 function! ZF_TagsFileLocal()
     let l:tagfile = g:ZFVimTagSetting_tagsName
     call delete(l:tagfile)
-    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R'
+    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R --fields=+l'
     let cmd = s:ZF_TagsExcludePattern(cmd)
     try
         redraw!
@@ -54,7 +58,7 @@ endfunction
 function! ZF_TagsFileGlobal()
     let l:tagfile = substitute(fnamemodify(g:ZFVimTagSetting_tagsGlobalPath . '/' . g:ZFVimTagSetting_tagsName, ':p'), '\\', '/', 'g')
     call delete(l:tagfile)
-    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R'
+    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R --fields=+l'
     let cmd = s:ZF_TagsExcludePattern(cmd)
     try
         redraw!
@@ -70,7 +74,7 @@ function! ZF_TagsFileGlobal()
 endfunction
 function! ZF_TagsFileGlobalAdd()
     let l:tagfile = substitute(fnamemodify(g:ZFVimTagSetting_tagsGlobalPath . '/' . g:ZFVimTagSetting_tagsName, ':p'), '\\', '/', 'g')
-    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R -a'
+    let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R -a --fields=+l'
     let cmd = s:ZF_TagsExcludePattern(cmd)
     try
         execute 'AsyncRun ' . cmd
