@@ -46,7 +46,7 @@ function! ZF_TagsFileLocal()
     try
         redraw!
         echo "generating tags in background"
-        execute 'AsyncRun ' . cmd
+        execute "call ZFAsyncRun('" . cmd . "', 'ZF_TagsFileLocal')"
     catch
         redraw!
         echo "generating tags"
@@ -63,7 +63,7 @@ function! ZF_TagsFileGlobal()
     try
         redraw!
         echo "generating tags in background"
-        execute 'AsyncRun ' . cmd
+        execute "call ZFAsyncRun('" . cmd . "', 'ZF_TagsFileGlobal')"
     catch
         redraw!
         echo "generating tags"
@@ -77,7 +77,7 @@ function! ZF_TagsFileGlobalAdd()
     let cmd = 'ctags -f "' . l:tagfile . '" --tag-relative=yes -R -a --fields=+l'
     let cmd = s:ZF_TagsExcludePattern(cmd)
     try
-        execute 'AsyncRun ' . cmd
+        execute "call ZFAsyncRun('" . cmd . "', 'ZF_TagsFileGlobal')"
     catch
         redraw!
         echo "generating tags"
